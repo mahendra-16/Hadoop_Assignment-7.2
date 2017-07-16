@@ -1,0 +1,27 @@
+a)
+emp_det = load 'hdfs://localhost:9000/pigscript/employee_details.txt' using PigStorage(',') as (id:int, emp_name:chararray, emp_sal:int, rank:int);
+
+emp_exp = load 'hdfs://localhost:9000/pigscript/employee_expenses.txt' using PigStorage(',') as (eid:int, e_exp:int);
+
+emp_od = ORDER emp_det BY emp_rank DESC;
+
+emp_limit = LIMIT emp_od 5;
+
+ord_emp = ORDER emp_limit BY emp_name ASC;
+
+dump ord_emp;
+
+b) 
+SPLIT emp_det INTO emp_even if id%2 == 0, emp_odd if id%2 == 1;
+
+ordr_emp = ORDER emp_odd BY emp_sal DESC;
+
+d)
+emp_join = JOIN emp_det BY id FULL OUTER, emp_exp BY eid;
+
+fil_exp = FILTER emp_join BY emp_exp is null;
+
+e)
+fill_exp = FILTER emp_join BY emp_exp is not null;
+
+
